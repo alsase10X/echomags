@@ -3,7 +3,7 @@
 import { generateText, type UIMessage } from "ai";
 import { cookies } from "next/headers";
 import type { VisibilityType } from "@/components/visibility-selector";
-import { myProvider } from "@/lib/ai/providers";
+import { getModel, MissingGroqApiKeyError } from "@/lib/llm";
 import {
   deleteMessagesByChatIdAfterTimestamp,
   getMessageById,
@@ -20,8 +20,20 @@ export async function generateTitleFromUserMessage({
 }: {
   message: UIMessage;
 }) {
+  let model;
+
+  try {
+    model = getModel("title-model");
+  } catch (error) {
+    if (error instanceof MissingGroqApiKeyError) {
+      throw new Error("Missing GROQ_API_KEY");
+    }
+
+    throw error;
+  }
+
   const { text: title } = await generateText({
-    model: myProvider.languageModel("title-model"),
+    model,
     system: `\n
     - you will generate a short title based on the first message a user begins a conversation with
     - ensure it is not more than 80 characters long

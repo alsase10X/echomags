@@ -5,7 +5,19 @@ import { getDocumentById, saveSuggestions } from "@/lib/db/queries";
 import type { Suggestion } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { generateUUID } from "@/lib/utils";
-import { myProvider } from "../providers";
+import { getModel, MissingGroqApiKeyError } from "@/lib/llm";
+
+function resolveArtifactModel() {
+  try {
+    return getModel("artifact-model");
+  } catch (error) {
+    if (error instanceof MissingGroqApiKeyError) {
+      throw new Error("Missing GROQ_API_KEY");
+    }
+
+    throw error;
+  }
+}
 
 type RequestSuggestionsProps = {
   session: Session;
@@ -38,7 +50,7 @@ export const requestSuggestions = ({
       >[] = [];
 
       const { elementStream } = streamObject({
-        model: myProvider.languageModel("artifact-model"),
+        model: resolveArtifactModel(),
         system:
           "You are a help writing assistant. Given a piece of writing, please offer suggestions to improve the piece of writing and describe the change. It is very important for the edits to contain full sentences instead of just words. Max 5 suggestions.",
         prompt: document.content,

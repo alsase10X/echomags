@@ -9,13 +9,12 @@ export type ChatModel = {
 export const chatModels: ChatModel[] = [
   {
     id: "chat-model",
-    name: "Grok Vision",
-    description: "Advanced multimodal model with vision and text capabilities",
+    name: "Llama 3.3 70B",
+    description: "Versatile Groq hosted Llama 3.3 70B model for general chat",
   },
   {
     id: "chat-model-reasoning",
-    name: "Grok Reasoning",
-    description:
-      "Uses advanced chain-of-thought reasoning for complex problems",
+    name: "DeepSeek R1 70B",
+    description: "Reasoning focused model distillation for complex workflows",
   },
 ];

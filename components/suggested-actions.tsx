@@ -15,10 +15,9 @@ type SuggestedActionsProps = {
 
 function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
   const suggestedActions = [
-    "What are the advantages of using Next.js?",
-    "Write code to demonstrate Dijkstra's algorithm",
-    "Help me write an essay about Silicon Valley",
-    "What is the weather in San Francisco?",
+    "\u00BFQu\u00E9 significa La noche estrellada?",
+    "\u00BFPor qu\u00E9 cortaste tu oreja?",
+    "\u00BFC\u00F3mo puedo pintar como t\u00FA?",
   ];
 
   return (
@@ -28,6 +27,11 @@ function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
     >
       {suggestedActions.map((suggestedAction, index) => (
         <motion.div
+          className={
+            suggestedActions.length > 3 && index === suggestedActions.length - 1
+              ? "hidden sm:block"
+              : undefined
+          }
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           initial={{ opacity: 0, y: 20 }}
@@ -35,7 +39,7 @@ function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
           transition={{ delay: 0.05 * index }}
         >
           <Suggestion
-            className="h-auto w-full whitespace-normal p-3 text-left"
+            className="h-auto w-full whitespace-normal !border-white p-3 text-left !text-white hover:!bg-white/10 hover:!text-white focus-visible:!ring-white"
             onClick={(suggestion) => {
               window.history.replaceState({}, "", `/chat/${chatId}`);
               sendMessage({

@@ -1,15 +1,29 @@
 import { smoothStream, streamText } from "ai";
 import { updateDocumentPrompt } from "@/lib/ai/prompts";
-import { myProvider } from "@/lib/ai/providers";
+import { getModel, MissingGroqApiKeyError } from "@/lib/llm";
 import { createDocumentHandler } from "@/lib/artifacts/server";
+
+function resolveArtifactModel() {
+  try {
+    return getModel("artifact-model");
+  } catch (error) {
+    if (error instanceof MissingGroqApiKeyError) {
+      throw new Error("Missing GROQ_API_KEY");
+    }
+
+    throw error;
+  }
+}
 
 export const textDocumentHandler = createDocumentHandler<"text">({
   kind: "text",
   onCreateDocument: async ({ title, dataStream }) => {
     let draftContent = "";
 
+    const model = resolveArtifactModel();
+
     const { fullStream } = streamText({
-      model: myProvider.languageModel("artifact-model"),
+      model,
       system:
         "Write about the given topic. Markdown is supported. Use headings wherever appropriate.",
       experimental_transform: smoothStream({ chunking: "word" }),
@@ -37,8 +51,10 @@ export const textDocumentHandler = createDocumentHandler<"text">({
   onUpdateDocument: async ({ document, description, dataStream }) => {
     let draftContent = "";
 
+    const model = resolveArtifactModel();
+
     const { fullStream } = streamText({
-      model: myProvider.languageModel("artifact-model"),
+      model,
       system: updateDocumentPrompt(document.content, "text"),
       experimental_transform: smoothStream({ chunking: "word" }),
       prompt: description,

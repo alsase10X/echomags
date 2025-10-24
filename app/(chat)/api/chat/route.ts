@@ -7,6 +7,7 @@ import {
   stepCountIs,
   streamText,
 } from "ai";
+import type { LanguageModelV1 } from "ai";
 import { unstable_cache as cache } from "next/cache";
 import { after } from "next/server";
 import {
@@ -21,7 +22,6 @@ import type { VisibilityType } from "@/components/visibility-selector";
 import { entitlementsByUserType } from "@/lib/ai/entitlements";
 import type { ChatModel } from "@/lib/ai/models";
 import { type RequestHints, systemPrompt } from "@/lib/ai/prompts";
-import { myProvider } from "@/lib/ai/providers";
 import { createDocument } from "@/lib/ai/tools/create-document";
 import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
@@ -41,6 +41,11 @@ import { ChatSDKError } from "@/lib/errors";
 import type { ChatMessage } from "@/lib/types";
 import type { AppUsage } from "@/lib/usage";
 import { convertToUIMessages, generateUUID } from "@/lib/utils";
+import {
+  getModel,
+  getModelId,
+  MissingGroqApiKeyError,
+} from "@/lib/llm";
 import { generateTitleFromUserMessage } from "../../actions";
 import { type PostRequestBody, postRequestBodySchema } from "./schema";
 
@@ -173,10 +178,24 @@ export async function POST(request: Request) {
 
     let finalMergedUsage: AppUsage | undefined;
 
+    let chatModel: LanguageModelV1;
+    try {
+      chatModel = getModel(selectedChatModel);
+    } catch (error) {
+      if (error instanceof MissingGroqApiKeyError) {
+        return Response.json(
+          { error: "Missing GROQ_API_KEY" },
+          { status: 500 }
+        );
+      }
+
+      throw error;
+    }
+
     const stream = createUIMessageStream({
       execute: ({ writer: dataStream }) => {
         const result = streamText({
-          model: myProvider.languageModel(selectedChatModel),
+          model: chatModel,
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: convertToModelMessages(uiMessages),
           stopWhen: stepCountIs(5),
@@ -207,7 +226,7 @@ export async function POST(request: Request) {
             try {
               const providers = await getTokenlensCatalog();
               const modelId =
-                myProvider.languageModel(selectedChatModel).modelId;
+                chatModel.modelId ?? getModelId(selectedChatModel);
               if (!modelId) {
                 finalMergedUsage = usage;
                 dataStream.write({

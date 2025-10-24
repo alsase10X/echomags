@@ -12,7 +12,8 @@
 
 /* define design tokens (light mode) */
 :root {
-  --background: hsl(0 0% 100%);
+  --background: #4daeb4;
+  --background-texture: url("/images/background-texture.png");
   --foreground: hsl(240 10% 3.9%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(240 10% 3.9%);
@@ -43,7 +44,7 @@
   --sidebar-accent: hsl(240 4.8% 95.9%);
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --sidebar-ring: hsl(165, 91%, 60%);
   /* border radius unit */
   --radius: 0.5rem;
   --sidebar: hsl(0 0% 98%);
@@ -51,17 +52,18 @@
 
 /* define design tokens (dark mode) */
 .dark {
-  --background: hsl(240 10% 3.9%);
-  --foreground: hsl(0 0% 98%);
-  --card: hsl(240 10% 3.9%);
+  --background: #4daeb4;
+  --background-texture: url("/images/background-texture.png");
+  --foreground: hsl(0, 5%, 61%);
+  --card: hsl(240, 17%, 43%);
   --card-foreground: hsl(0 0% 98%);
-  --popover: hsl(240 10% 3.9%);
+  --popover: hsl(240, 29%, 31%);
   --popover-foreground: hsl(0 0% 98%);
   --primary: hsl(0 0% 98%);
   --primary-foreground: hsl(240 5.9% 10%);
   --secondary: hsl(240 3.7% 15.9%);
   --secondary-foreground: hsl(0 0% 98%);
-  --muted: hsl(240 3.7% 15.9%);
+  --muted: hsl(0, 0%, 83%);
   --muted-foreground: hsl(240 5% 64.9%);
   --accent: hsl(240 3.7% 15.9%);
   --accent-foreground: hsl(0 0% 98%);
@@ -70,19 +72,19 @@
   --border: hsl(240 3.7% 15.9%);
   --input: hsl(240 3.7% 15.9%);
   --ring: hsl(240 4.9% 83.9%);
-  --chart-1: hsl(220 70% 50%);
+  --chart-1: hsl(240, 100%, 100%);
   --chart-2: hsl(160 60% 45%);
   --chart-3: hsl(30 80% 55%);
   --chart-4: hsl(280 65% 60%);
   --chart-5: hsl(340 75% 55%);
   --sidebar-background: hsl(240 5.9% 10%);
   --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary: hsl(96, 76%, 48%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
   --sidebar-accent: hsl(240 3.7% 15.9%);
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --sidebar-ring: hsl(135, 91%, 60%);
   --sidebar: hsl(240 5.9% 10%);
 }
 
@@ -189,15 +191,30 @@
       --background-end-rgb: 0, 0, 0;
     }
   }
+
+  .bg-background {
+    background-attachment: fixed;
+    background-image: var(--background-texture);
+    background-position: center;
+    background-repeat: repeat;
+    background-size: 560px 560px;
+  }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
 
   body {
     @apply bg-background text-foreground;
+    background-attachment: fixed;
+    background-image: var(--background-texture);
+    background-position: center;
+    background-repeat: repeat;
+    background-size: 560px 560px;
+    font-size: 1.05rem;
+    line-height: 1.6;
     overflow-x: hidden;
     position: relative;
   }
@@ -307,11 +324,3 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}

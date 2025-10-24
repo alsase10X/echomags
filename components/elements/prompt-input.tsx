@@ -24,7 +24,7 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      "w-full overflow-hidden rounded-xl border bg-background shadow-xs",
+      "w-full overflow-hidden rounded-2xl border bg-white shadow-xs dark:bg-white",
       className
     )}
     {...props}
@@ -41,7 +41,7 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea> & {
 export const PromptInputTextarea = ({
   onChange,
   className,
-  placeholder = "What would you like to know?",
+  placeholder = "Env\u00EDa un mensaje a Van Gogh",
   minHeight = 48,
   maxHeight = 164,
   disableAutoResize = false,

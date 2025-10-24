@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
@@ -23,46 +24,76 @@ function PureChatHeader({
   const { open } = useSidebar();
 
   const { width: windowWidth } = useWindowSize();
+  const logoLabel = process.env.NEXT_PUBLIC_HEADER_BRAND ?? "EchoMagnet";
+  const logoHref = process.env.NEXT_PUBLIC_HEADER_BRAND_HREF ?? "/";
+  const logoSrc =
+    process.env.NEXT_PUBLIC_HEADER_LOGO_SRC ?? "/images/echomagnet-logo.svg";
 
   return (
-    <header className="sticky top-0 flex items-center gap-2 bg-background px-2 py-1.5 md:px-2">
-      <SidebarToggle />
+    <header className="sticky top-0 flex items-center gap-2 bg-background px-2 py-1.5 md:px-4">
+      <div className="flex items-center gap-2">
+        <SidebarToggle />
 
-      {(!open || windowWidth < 768) && (
-        <Button
-          className="order-2 ml-auto h-8 px-2 md:order-1 md:ml-0 md:h-fit md:px-2"
-          onClick={() => {
-            router.push("/");
-            router.refresh();
-          }}
-          variant="outline"
-        >
-          <PlusIcon />
-          <span className="md:sr-only">New Chat</span>
-        </Button>
-      )}
+        {!isReadonly && (
+          <VisibilitySelector
+            chatId={chatId}
+            selectedVisibilityType={selectedVisibilityType}
+          />
+        )}
+      </div>
 
-      {!isReadonly && (
-        <VisibilitySelector
-          chatId={chatId}
-          className="order-1 md:order-2"
-          selectedVisibilityType={selectedVisibilityType}
-        />
-      )}
-
-      <Button
-        asChild
-        className="order-3 hidden bg-zinc-900 px-2 text-zinc-50 hover:bg-zinc-800 md:ml-auto md:flex md:h-fit dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-      >
+      <div className="flex flex-1 justify-center">
         <Link
-          href={"https://vercel.com/templates/next.js/nextjs-ai-chatbot"}
-          rel="noreferrer"
-          target="_noblank"
+          className="flex h-12 min-w-[176px] items-center justify-center px-2 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+          href={logoHref}
         >
-          <VercelIcon size={16} />
-          Deploy with Vercel
+          {logoSrc ? (
+            <>
+              <Image
+                alt={logoLabel}
+                className="h-10 w-auto"
+                height={40}
+                priority
+                src={logoSrc}
+                width={200}
+              />
+              <span className="sr-only">{logoLabel}</span>
+            </>
+          ) : (
+            logoLabel
+          )}
         </Link>
-      </Button>
+      </div>
+
+      <div className="flex items-center gap-2">
+        {(!open || windowWidth < 768) && (
+          <Button
+            className="h-8 px-2 text-white !border-transparent hover:bg-white/10 focus-visible:ring-white md:h-fit md:px-2"
+            onClick={() => {
+              router.push("/");
+              router.refresh();
+            }}
+            variant="outline"
+          >
+            <PlusIcon />
+            <span className="sr-only">New Chat</span>
+          </Button>
+        )}
+
+        <Button
+          asChild
+          className="hidden bg-zinc-900 px-2 text-zinc-50 hover:bg-zinc-800 md:flex md:h-fit dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        >
+          <Link
+            href={"https://vercel.com/templates/next.js/nextjs-ai-chatbot"}
+            rel="noreferrer"
+            target="_noblank"
+          >
+            <VercelIcon size={16} />
+            Deploy with Vercel
+          </Link>
+        </Button>
+      </div>
     </header>
   );
 }

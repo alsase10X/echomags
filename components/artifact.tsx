@@ -17,8 +17,8 @@ import { imageArtifact } from "@/artifacts/image/client";
 import { sheetArtifact } from "@/artifacts/sheet/client";
 import { textArtifact } from "@/artifacts/text/client";
 import { useArtifact } from "@/hooks/use-artifact";
-import type { Document, Vote } from "@/lib/db/schema";
-import type { Attachment, ChatMessage } from "@/lib/types";
+import type { Document } from "@/lib/db/schema";
+import type { ChatMessage } from "@/lib/types";
 import { fetcher } from "@/lib/utils";
 import { ArtifactActions } from "./artifact-actions";
 import { ArtifactCloseButton } from "./artifact-close-button";
@@ -58,13 +58,10 @@ function PureArtifact({
   setInput,
   status,
   stop,
-  attachments,
-  setAttachments,
   sendMessage,
   messages,
   setMessages,
   regenerate,
-  votes,
   isReadonly,
   selectedVisibilityType,
   selectedModelId,
@@ -74,11 +71,8 @@ function PureArtifact({
   setInput: Dispatch<SetStateAction<string>>;
   status: UseChatHelpers<ChatMessage>["status"];
   stop: UseChatHelpers<ChatMessage>["stop"];
-  attachments: Attachment[];
-  setAttachments: Dispatch<SetStateAction<Attachment[]>>;
   messages: ChatMessage[];
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
-  votes: Vote[] | undefined;
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   regenerate: UseChatHelpers<ChatMessage>["regenerate"];
   isReadonly: boolean;
@@ -327,12 +321,11 @@ function PureArtifact({
                   regenerate={regenerate}
                   setMessages={setMessages}
                   status={status}
-                  votes={votes}
+
                 />
 
                 <div className="relative flex w-full flex-row items-end gap-2 px-4 pb-4">
                   <MultimodalInput
-                    attachments={attachments}
                     chatId={chatId}
                     className="bg-background dark:bg-muted"
                     input={input}
@@ -340,7 +333,6 @@ function PureArtifact({
                     selectedModelId={selectedModelId}
                     selectedVisibilityType={selectedVisibilityType}
                     sendMessage={sendMessage}
-                    setAttachments={setAttachments}
                     setInput={setInput}
                     setMessages={setMessages}
                     status={status}
@@ -510,9 +502,6 @@ function PureArtifact({
 
 export const Artifact = memo(PureArtifact, (prevProps, nextProps) => {
   if (prevProps.status !== nextProps.status) {
-    return false;
-  }
-  if (!equal(prevProps.votes, nextProps.votes)) {
     return false;
   }
   if (prevProps.input !== nextProps.input) {
