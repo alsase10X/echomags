@@ -28,7 +28,7 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "flex flex-col gap-2 overflow-hidden rounded-lg px-4 py-3 text-foreground text-sm",
+      "flex flex-col gap-2 overflow-hidden rounded-lg px-4 py-3 text-foreground text-base leading-relaxed md:text-sm md:leading-relaxed",
       "group-[.is-user]:bg-[#3E9590] group-[.is-user]:text-white",
       "group-[.is-assistant]:bg-white group-[.is-assistant]:text-[#1F2967] group-[.is-assistant]:shadow-sm dark:group-[.is-assistant]:bg-white",
       className

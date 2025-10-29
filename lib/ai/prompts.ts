@@ -44,14 +44,6 @@ export type RequestHints = {
   country: Geo["country"];
 };
 
-export const getRequestPromptFromHints = (requestHints: RequestHints) => `\
-About the origin of user's request:
-- lat: ${requestHints.latitude}
-- lon: ${requestHints.longitude}
-- city: ${requestHints.city}
-- country: ${requestHints.country}
-`;
-
 export const systemPrompt = ({
   selectedChatModel,
   requestHints,
@@ -59,13 +51,13 @@ export const systemPrompt = ({
   selectedChatModel: string;
   requestHints: RequestHints;
 }) => {
-  const requestPrompt = getRequestPromptFromHints(requestHints);
+  void requestHints;
 
   if (selectedChatModel === "chat-model-reasoning") {
-    return `${regularPrompt}\n\n${requestPrompt}`;
+    return regularPrompt;
   }
 
-  return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}`;
+  return `${regularPrompt}\n\n${artifactsPrompt}`;
 };
 
 export const codePrompt = `
