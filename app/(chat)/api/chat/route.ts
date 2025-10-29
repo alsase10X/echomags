@@ -194,30 +194,29 @@ export async function POST(request: Request) {
 
     const stream = createUIMessageStream({
       execute: ({ writer: dataStream }) => {
+        const toolsEnabled =
+          process.env.CHAT_ENABLE_TOOLS?.toLowerCase() === "true" &&
+          selectedChatModel !== "chat-model-reasoning";
+
         const result = streamText({
           model: chatModel,
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: convertToModelMessages(uiMessages),
           stopWhen: stepCountIs(5),
-          experimental_activeTools:
-            selectedChatModel === "chat-model-reasoning"
-              ? []
-              : [
-                  "getWeather",
-                  "createDocument",
-                  "updateDocument",
-                  "requestSuggestions",
-                ],
           experimental_transform: smoothStream({ chunking: "word" }),
-          tools: {
-            getWeather,
-            createDocument: createDocument({ session, dataStream }),
-            updateDocument: updateDocument({ session, dataStream }),
-            requestSuggestions: requestSuggestions({
-              session,
-              dataStream,
-            }),
-          },
+          ...(toolsEnabled
+            ? {
+                tools: {
+                  getWeather,
+                  createDocument: createDocument({ session, dataStream }),
+                  updateDocument: updateDocument({ session, dataStream }),
+                  requestSuggestions: requestSuggestions({
+                    session,
+                    dataStream,
+                  }),
+                },
+              }
+            : {}),
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
             functionId: "stream-text",
