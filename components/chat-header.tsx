@@ -51,11 +51,11 @@ function PureChatHeader({
             <>
               <Image
                 alt={logoLabel}
-                className="h-10 w-auto"
-                height={40}
+                className="h-8 w-auto md:h-9"
+                height={36}
                 priority
                 src={logoSrc}
-                width={200}
+                width={160}
               />
               <span className="sr-only">{logoLabel}</span>
             </>

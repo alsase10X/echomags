@@ -2,7 +2,6 @@
 
 import type { UseChatHelpers } from "@ai-sdk/react";
 import type { UIMessage } from "ai";
-import equal from "fast-deep-equal";
 import {
   type Dispatch,
   memo,
@@ -37,7 +36,6 @@ function PureMultimodalInput({
   sendMessage,
   className,
   selectedVisibilityType,
-  selectedModelId,
 }: {
   chatId: string;
   input: string;
@@ -151,7 +149,7 @@ function PureMultimodalInput({
         <div className="flex flex-row items-start gap-1 sm:gap-2">
           <PromptInputTextarea
             autoFocus
-            className="grow resize-none border-0! border-none! bg-transparent px-2 py-1 text-sm outline-none ring-0 [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-scrollbar]:hidden"
+            className="grow resize-none border-0! border-none! bg-transparent px-2 py-1 text-base outline-none ring-0 [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-scrollbar]:hidden"
             data-testid="multimodal-input"
             disableAutoResize={true}
             maxHeight={200}
@@ -163,7 +161,7 @@ function PureMultimodalInput({
             value={input}
           />
         </div>
-        <PromptInputToolbar className="!border-t-0 !p-0 !justify-end shadow-none dark:!border-0 dark:!border-transparent">
+        <PromptInputToolbar className="!border-t-0 !justify-end !p-0 dark:!border-0 dark:!border-transparent shadow-none">
           {status === "submitted" ? (
             <StopButton setMessages={setMessages} stop={stop} />
           ) : (
@@ -224,7 +222,3 @@ function PureStopButton({
 }
 
 const StopButton = memo(PureStopButton);
-
-
-
-

@@ -8,7 +8,7 @@ import { cn, sanitizeText } from "@/lib/utils";
 import { useDataStream } from "./data-stream-provider";
 import { DocumentToolResult } from "./document";
 import { DocumentPreview } from "./document-preview";
-import { MessageContent } from "./elements/message";
+import { MessageAvatar, MessageContent } from "./elements/message";
 import { Response } from "./elements/response";
 import {
   Tool,
@@ -17,12 +17,20 @@ import {
   ToolInput,
   ToolOutput,
 } from "./elements/tool";
-import { SparklesIcon } from "./icons";
 import { MessageActions } from "./message-actions";
 import { MessageEditor } from "./message-editor";
 import { MessageReasoning } from "./message-reasoning";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
+
+const assistantAvatarSrc =
+  process.env.NEXT_PUBLIC_ASSISTANT_AVATAR ?? "/images/vangogh-avatar.svg";
+const assistantAvatarAlt =
+  process.env.NEXT_PUBLIC_ASSISTANT_AVATAR_ALT ??
+  "Retrato ilustrado de Vincent van Gogh";
+const assistantAvatarInitials = process.env.NEXT_PUBLIC_ASSISTANT_INITIALS
+  ? process.env.NEXT_PUBLIC_ASSISTANT_INITIALS.slice(0, 2).toUpperCase()
+  : "VG";
 
 const PurePreviewMessage = ({
   chatId,
@@ -53,6 +61,7 @@ const PurePreviewMessage = ({
     <motion.div
       animate={{ opacity: 1 }}
       className="group/message w-full"
+      data-chat-id={chatId}
       data-role={message.role}
       data-testid={`message-${message.role}`}
       initial={{ opacity: 0 }}
@@ -64,9 +73,12 @@ const PurePreviewMessage = ({
         })}
       >
         {message.role === "assistant" && (
-          <div className="-mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
-            <SparklesIcon size={14} />
-          </div>
+          <MessageAvatar
+            alt={assistantAvatarAlt}
+            className="-mt-1 shrink-0 bg-[#3E9590] shadow-sm ring-2 ring-[#3E9590]"
+            name={assistantAvatarInitials}
+            src={assistantAvatarSrc}
+          />
         )}
 
         <div
@@ -124,18 +136,13 @@ const PurePreviewMessage = ({
                     <MessageContent
                       className={cn(
                         message.role === "assistant" &&
-                          "rounded-2xl bg-white/95 shadow-sm text-left",
+                          "rounded-2xl bg-white/95 text-left text-[#171717] shadow-sm",
                         {
-                        "w-fit break-words rounded-2xl px-3 py-2 text-right text-white":
-                          message.role === "user",
+                          "w-fit break-words rounded-2xl bg-[#3E9590] px-3 py-2 text-right text-white":
+                            message.role === "user",
                         }
                       )}
                       data-testid="message-content"
-                      style={
-                        message.role === "user"
-                          ? { backgroundColor: "rgb(77, 174, 180)" }
-                          : undefined
-                      }
                     >
                       <Response>{sanitizeText(part.text)}</Response>
                     </MessageContent>
@@ -316,17 +323,17 @@ export const ThinkingMessage = () => {
       transition={{ duration: 0.2 }}
     >
       <div className="flex items-start justify-start gap-3">
-        <div className="-mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
-          <SparklesIcon size={14} />
-        </div>
+        <MessageAvatar
+          alt={assistantAvatarAlt}
+          className="-mt-1 shrink-0 bg-[#3E9590] shadow-sm ring-2 ring-[#3E9590]"
+          name={assistantAvatarInitials}
+          src={assistantAvatarSrc}
+        />
 
         <div className="flex w-full flex-col gap-2 md:gap-4">
-          <div className="p-0 text-muted-foreground text-sm">
-            Thinking...
-          </div>
+          <div className="p-0 text-muted-foreground text-sm">Thinking...</div>
         </div>
       </div>
     </motion.div>
   );
 };
-

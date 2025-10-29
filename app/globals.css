@@ -13,7 +13,7 @@
 /* define design tokens (light mode) */
 :root {
   --background: #4daeb4;
-  --background-texture: url("/images/background-texture.png");
+  --background-texture: url("/images/background-texture.svg"), url("/images/background-texture.png");
   --foreground: hsl(240 10% 3.9%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(240 10% 3.9%);
@@ -53,7 +53,7 @@
 /* define design tokens (dark mode) */
 .dark {
   --background: #4daeb4;
-  --background-texture: url("/images/background-texture.png");
+  --background-texture: url("/images/background-texture.svg"), url("/images/background-texture.png");
   --foreground: hsl(0, 5%, 61%);
   --card: hsl(240, 17%, 43%);
   --card-foreground: hsl(0 0% 98%);
