@@ -1,5 +1,5 @@
 import { createGroq } from "@ai-sdk/groq";
-import type { LanguageModelV1 } from "ai";
+import type { LanguageModel } from "ai";
 
 const DEFAULT_PROVIDER = "groq";
 const DEFAULT_MODEL_ID = "llama-3.3-70b-versatile";
@@ -60,7 +60,7 @@ export function getProvider(): GroqProvider {
   return cachedProvider;
 }
 
-export function getModel(modelId?: string): LanguageModelV1 {
+export function getModel(modelId?: string): LanguageModel {
   const provider = getProvider();
 
   return provider.languageModel(resolveModelId(modelId));

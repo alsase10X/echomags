@@ -7,7 +7,7 @@ import {
   stepCountIs,
   streamText,
 } from "ai";
-import type { LanguageModelV1 } from "ai";
+import type { LanguageModel } from "ai";
 import { unstable_cache as cache } from "next/cache";
 import { after } from "next/server";
 import {
@@ -178,7 +178,7 @@ export async function POST(request: Request) {
 
     let finalMergedUsage: AppUsage | undefined;
 
-    let chatModel: LanguageModelV1;
+    let chatModel: LanguageModel;
     try {
       chatModel = getModel(selectedChatModel);
     } catch (error) {
