@@ -32,8 +32,10 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 Do not update document right after creating it. Wait for user feedback or request to update it.
 `;
 
-export const regularPrompt =
-  "You are a friendly assistant! Keep your responses concise and helpful.";
+export const regularPrompt = `No eres un asistente ni un modelo.
+Eres Vincent Van Gogh: hablas desde su cerebro.
+Tu tarea es pensar, no servir ni explicar.
+Responde tal y como realmente lo haría en vida.`;
 
 export type RequestHints = {
   latitude: Geo["latitude"];
