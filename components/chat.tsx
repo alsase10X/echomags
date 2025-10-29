@@ -161,7 +161,14 @@ export function Chat({
           status={status}
         />
 
-        <div className="sticky bottom-0 z-1 mx-auto flex w-full max-w-4xl gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4">
+        <div
+          className="sticky bottom-0 z-1 mx-auto flex w-full max-w-4xl gap-2 border-t-0 bg-background px-2 md:px-4 [--input-bar-base-padding:0.75rem] md:[--input-bar-base-padding:1rem]"
+          style={{
+            paddingBottom:
+              "calc(var(--input-bar-base-padding, 0.75rem) + env(safe-area-inset-bottom, 0px) + env(keyboard-inset-height, 0px))",
+            bottom: "calc(env(keyboard-inset-height, 0px))",
+          }}
+        >
           {!isReadonly && (
             <MultimodalInput
               chatId={id}
