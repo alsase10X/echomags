@@ -13,6 +13,7 @@ import {
 import { toast } from "sonner";
 import { useLocalStorage, useWindowSize } from "usehooks-ts";
 import type { ChatMessage } from "@/lib/types";
+import type { AppUsage } from "@/lib/usage";
 import { cn } from "@/lib/utils";
 import {
   PromptInput,
@@ -36,6 +37,7 @@ function PureMultimodalInput({
   sendMessage,
   className,
   selectedVisibilityType,
+  usage: _usage,
 }: {
   chatId: string;
   input: string;
@@ -48,9 +50,11 @@ function PureMultimodalInput({
   className?: string;
   selectedVisibilityType: VisibilityType;
   selectedModelId: string;
+  usage?: AppUsage;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
+  void _usage;
 
   const adjustHeight = useCallback(() => {
     if (textareaRef.current) {
