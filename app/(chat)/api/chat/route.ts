@@ -203,6 +203,7 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: convertToModelMessages(uiMessages),
           stopWhen: stepCountIs(5),
+          maxOutputTokens: 1200,
           experimental_transform: smoothStream({ chunking: "word" }),
           ...(toolsEnabled
             ? {
